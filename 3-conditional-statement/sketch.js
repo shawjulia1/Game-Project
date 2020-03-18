@@ -1,23 +1,26 @@
 //create an empty array called balls
 let balls = [];
-
-//create a variable to hold your avatar
+let tree;
+let anothertree;
+let t;
 let me;
 
 
 function setup() {
   createCanvas(500, 400);
-
-  //make one avatar called me
   me = new Avatar(width/2, 300, 3);
-
+  tree = new Tree (100,120,"brown")
+  anothertree = new Tree (400,300,"green")
+  t= new Tree (350,50,"lightgreen")
 }
 
 function draw(){
 	background(220);
-
   me.drawMe();
   me.moveMe();
+  tree.drawTree();
+  anothertree.drawTree();
+  t.drawTree();
 
   if (frameCount % 25 == 0) {
       let  b = new Ball(width, random(0,height), -3);
@@ -44,9 +47,9 @@ class Avatar {
 	}
 
 	drawMe(){  // draw the running person
-    		stroke("green");
-        strokeWeight(3);
-    		fill("blue");
+    		stroke("black");
+        strokeWeight(2);
+    		fill("pink");
 		    ellipse(this.x,this.y,20,20);
         line(this.x,this.y, this.x, this.y+40);
         line(this.x, this.y+40, this.x-20, this.y+60);
@@ -63,6 +66,14 @@ class Avatar {
 
     if (keyIsDown(DOWN_ARROW)) { // if you hold the down arrow, move down by speed
         this.y += this.speed;
+    }
+
+    if(keyIsDown(LEFT_ARROW)){
+      this.x -=this.speed;
+    }
+
+    if(keyIsDown(RIGHT_ARROW)){
+      this.x +=this.speed;
     }
 	}
 
@@ -87,14 +98,14 @@ class Ball {
 	drawBall(){
     	stroke(0);
       strokeWeight(1);
-    	fill("red");
+    	fill("lightblue");
 		  ellipse(this.x,this.y,10,10);
 	}
 
 	//update the location of the ball, so it moves across the screen
 	moveBall(){
 		this.x = this.x+ this.speed;
-		this.y = this.y+.5;
+		this.y = this.y-1;
 	}
 
 	//if the ball hits the person, change the speed value to negative (send it in the opposite direction)
@@ -102,6 +113,34 @@ class Ball {
     		if (this.x >= me.x-15 && this.x <= me.x+15 && this.y > me.y-40 && this.y < me.y+40){
       			this.speed = -this.speed;
     		}
-  	}
 
+        if(this.x >= tree.x-15 && this.x <= tree.x+15 && this.y > tree.y-40 && this.y < tree.y+40){
+      			this.speed = -this.speed;
+          }
+
+        if(this.x >= anothertree.x-15 && this.x <= anothertree.x+15 && this.y > anothertree.y-40 && this.y < anothertree.y+40){
+      			this.speed = -this.speed;
+          }
+
+        if(this.x >= t.x-15 && this.x <= t.x+15 && this.y > t.y-40 && this.y < t.y+40){
+      			this.speed = -this.speed;
+          }
+    }
+}
+
+class Tree {
+
+  constructor(x,y,color){
+    this.x = x;
+    this.y = y;
+    this.color = color;
+  }
+
+  drawTree(){
+    stroke(0);
+    fill(this.color);
+  	rect(this.x,this.y,10,60);
+    fill(this.color);
+    triangle(this.x+5,this.y-50,this.x+25,this.y,this.x-15,this.y)
+  }
 }
